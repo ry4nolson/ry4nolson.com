@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build
+build/
+dist/
+.react-router/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+*.log
+npm-debug.log*
+
+# Netlify
+.netlify/
