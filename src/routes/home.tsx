@@ -6,7 +6,7 @@ export function meta() {
     {
       name: "description",
       content:
-        "Ryan Olson's corner of the web. Stuff I build, things I write, and the occasional hot take.",
+        "Ryan Olson's corner of the web. Projects, about, and what I'm building.",
     },
   ];
 }
@@ -20,7 +20,7 @@ export default function Home() {
           Hey, I'm Ryan
         </h1>
         <p className="mt-5 text-xl text-neutral-600">
-          I make things on the web — apps, tools, and sometimes a blog post when the mood strikes.
+          I make things on the web — apps, tools, and the occasional side project.
           Also run <span className="font-semibold text-brand-primary">ry4nolson LLC</span> so I can keep doing this.
         </p>
         <div className="mt-10 flex flex-wrap gap-4">
@@ -29,12 +29,6 @@ export default function Home() {
             className="inline-flex items-center rounded-xl bg-brand-primary px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-brand-primary-light hover:shadow-lg"
           >
             See what I've built →
-          </Link>
-          <Link
-            to="/blog"
-            className="inline-flex items-center rounded-xl border-2 border-brand-primary bg-white px-5 py-3 text-sm font-semibold text-brand-primary transition hover:bg-amber-50"
-          >
-            Read the blog
           </Link>
         </div>
       </section>
@@ -48,13 +42,18 @@ export default function Home() {
             <Link to="/projects" className="font-medium text-brand-primary hover:underline">
               The Annex
             </Link>{" "}
-            — Where teams actually get their projects in one place.
+            — Sync your Mac folders to your NAS from the menu bar. Open source.
           </li>
           <li>
-            <Link to="/projects" className="font-medium text-brand-primary hover:underline">
+            <a
+              href="https://cutoverapp.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-brand-primary hover:underline"
+            >
               Cutover
-            </Link>{" "}
-            — Stop sweating site migrations. Compare old vs new before you flip the switch.
+            </a>{" "}
+            — Migration diff for websites: missing pages, redirects, and performance in one scan.
           </li>
         </ul>
       </section>

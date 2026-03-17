@@ -32,8 +32,8 @@ export default function About() {
         </h2>
         <ul>
           <li>React, Node, TypeScript — the usual suspects</li>
-          <li>Cutover — for when you're moving a site and need to not break everything</li>
-          <li>The Annex — project management that doesn't feel like a second job</li>
+          <li><a href="https://cutoverapp.dev" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary underline hover:no-underline">Cutover</a> — compare old vs new during a site migration so you don’t break anything</li>
+          <li><a href="https://theannex.app" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary underline hover:no-underline">The Annex</a> — macOS menu bar app that syncs your Mac to your NAS (open source, optional support)</li>
           <li>Netlify, Vercel, boring old servers — whatever gets it out the door</li>
         </ul>
 

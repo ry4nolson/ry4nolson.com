@@ -1,6 +1,6 @@
 # ry4nolson.com
 
-Personal portfolio and blog for **Ryan Olson** (ry4nolson LLC). Built with React 19, React Router v7 (SSR), Tailwind CSS, Vite, and Netlify.
+Personal portfolio for **Ryan Olson** (ry4nolson LLC). Built with React 19, React Router v7 (SSR), Tailwind CSS, Vite, and Netlify.
 
 ## Stack
 
@@ -8,15 +8,14 @@ Personal portfolio and blog for **Ryan Olson** (ry4nolson LLC). Built with React
 - **Tailwind CSS** for styling
 - **Vite** with `@react-router/dev/vite`
 - **Netlify** hosting via `@netlify/vite-plugin-react-router`
-- **Markdown** blog posts in `content/posts/*.md` (parsed at build time with gray-matter + marked)
+- **Markdown** for optional project changelogs in `content/changelogs/*.md` (parsed at build time with gray-matter + marked)
 - **TypeScript** throughout
 
 ## Structure
 
-- **Home** — Intro, highlights, links to Projects and Blog
+- **Home** — Intro, highlights, link to Projects
 - **About** — Bio, ry4nolson LLC, what I build, contact
-- **Projects** — List/cards for projects (e.g. The Annex, Cutover)
-- **Blog** — Index at `/blog`; each post at `/blog/:slug` from Markdown in the repo
+- **Projects** — List/cards for projects (e.g. [The Annex](https://theannex.app), [Cutover](https://cutoverapp.dev)); each project can optionally have a **Changelog** at `/projects/:slug/changelog`
 
 ## Run locally
 
@@ -48,14 +47,15 @@ npm run preview
    - **Functions directory:** `netlify/functions` (optional; for serverless later)
 3. Deploy.
 
-Netlify’s React Router plugin handles SSR and redirects. No extra config needed for the blog or static routes.
+Netlify's React Router plugin handles SSR and redirects.
 
-## Blog posts
+## Project changelogs
 
-- Add a `.md` file in `content/posts/` with frontmatter: `title`, `slug`, `date`, `excerpt`.
-- The blog index lists all posts (newest first); each post is available at `/blog/<slug>`.
-- No CMS — content is read from the repo at build time.
+- Add a `.md` file in `content/changelogs/` named by project slug (e.g. `cutover.md`, `the-annex.md`).
+- Optional frontmatter: `title` (page heading; defaults to the filename).
+- The Projects page shows a **Changelog** link for each project that has a matching file. No file = no link.
+- Content is Markdown, parsed at build time.
 
 ## Optional: Now / Uses page
 
-To add a “Now” or “Uses” page (what you’re working on / tools you use), add a route in `src/routes.ts` and a corresponding file in `src/routes/` (e.g. `route("now", "routes/now.tsx")`).
+To add a "Now" or "Uses" page, add a route in `src/routes.ts` and a corresponding file in `src/routes/` (e.g. `route("now", "routes/now.tsx")`).

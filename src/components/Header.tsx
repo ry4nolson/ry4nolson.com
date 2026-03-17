@@ -5,7 +5,6 @@ const navLinks = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects" },
-  { to: "/blog", label: "Blog" },
 ];
 
 export function Header() {
@@ -71,7 +70,7 @@ export function Header() {
       </div>
 
       {mobileOpen && (
-        <div className="border-t border-brand-border px-4 py-3 sm:hidden">
+        <div className="border-t border-neutral-200 px-4 py-3 sm:hidden">
           <nav className="flex flex-col gap-2" aria-label="Mobile navigation">
             {navLinks.map(({ to, label }) => (
               <Link
