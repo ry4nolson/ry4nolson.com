@@ -1,6 +1,7 @@
 import { data } from "react-router";
 import { Link } from "react-router";
 import { listChangelogSlugs } from "~/lib/changelog/loadChangelog";
+import { useEffect, useMemo, useState } from "react";
 
 export async function loader() {
   const changelogSlugs = listChangelogSlugs();
@@ -39,12 +40,75 @@ const projects = [
   },
 ];
 
+const THEANNEX_SCREENSHOTS: { src: string; alt: string }[] = [
+  {
+    src: "/screenshots/theannex/GeneralTab.png",
+    alt: "General tab — devices and status",
+  },
+  {
+    src: "/screenshots/theannex/SyncFoldersTab.png",
+    alt: "Sync Folders tab — sync pairs and controls",
+  },
+  {
+    src: "/screenshots/theannex/ActivityLogTab.png",
+    alt: "Activity Log tab — searchable sync log",
+  },
+  {
+    src: "/screenshots/theannex/StatisticsTab.png",
+    alt: "Statistics tab — charts and transfer metrics",
+  },
+  {
+    src: "/screenshots/theannex/AdvancedTab.png",
+    alt: "Advanced tab — scheduling and rsync options",
+  },
+  {
+    src: "/screenshots/theannex/WhatsNewTab.png",
+    alt: "What's New tab — changelog inside the app",
+  },
+  {
+    src: "/screenshots/theannex/AboutTab.png",
+    alt: "About tab — version and update controls",
+  },
+];
+
 export default function Projects({
   loaderData,
 }: {
   loaderData: { changelogSlugs: string[] };
 }) {
   const { changelogSlugs } = loaderData;
+
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const prefersReducedMotion = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    return (
+      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false
+    );
+  }, []);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setLightboxOpen(false);
+      if (e.key === "ArrowLeft") {
+        setLightboxIndex(
+          (i) => (i - 1 + THEANNEX_SCREENSHOTS.length) % THEANNEX_SCREENSHOTS.length
+        );
+      }
+      if (e.key === "ArrowRight") {
+        setLightboxIndex(
+          (i) => (i + 1) % THEANNEX_SCREENSHOTS.length
+        );
+      }
+    }
+
+    // Reduced motion doesn't disable keyboard navigation; keep accessibility consistent.
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [lightboxOpen, prefersReducedMotion]);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
@@ -95,10 +159,122 @@ export default function Projects({
                   ))}
                 </span>
               </div>
+
+              {project.slug === "the-annex" && (
+                <div className="mt-6">
+                  <p className="text-sm font-semibold text-neutral-800">
+                    Screenshots
+                  </p>
+
+                  <div className="mt-3 grid grid-cols-4 gap-2">
+                    {THEANNEX_SCREENSHOTS.slice(0, 4).map((shot, i) => (
+                      <button
+                        key={shot.src}
+                        type="button"
+                        onClick={() => {
+                          setLightboxIndex(i);
+                          setLightboxOpen(true);
+                        }}
+                        className="relative overflow-hidden rounded-lg border border-neutral-200 bg-white transition hover:border-brand-primary/50 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+                        aria-label={`View screenshot: ${shot.alt}`}
+                      >
+                        <img
+                          src={shot.src}
+                          alt={shot.alt}
+                          className="h-20 w-full object-cover"
+                          loading="lazy"
+                        />
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="mt-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setLightboxIndex(0);
+                        setLightboxOpen(true);
+                      }}
+                      className="text-sm font-semibold text-brand-primary underline decoration-brand-primary transition hover:no-underline"
+                    >
+                      View all →
+                    </button>
+                  </div>
+                </div>
+              )}
             </li>
           );
         })}
       </ul>
+
+      {lightboxOpen && (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-neutral-900/70 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="The Annex screenshot viewer"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) setLightboxOpen(false);
+          }}
+        >
+          <div className="relative w-full max-w-4xl overflow-hidden rounded-2xl border border-white/10 bg-white shadow-2xl">
+            <div className="relative aspect-[16/10] w-full bg-neutral-100">
+              <img
+                src={THEANNEX_SCREENSHOTS[lightboxIndex]?.src}
+                alt={
+                  THEANNEX_SCREENSHOTS[lightboxIndex]?.alt ??
+                  "Screenshot"
+                }
+                className="h-full w-full object-contain"
+              />
+
+              <button
+                type="button"
+                onClick={() => setLightboxOpen(false)}
+                className="absolute right-3 top-3 rounded-lg bg-white/90 px-3 py-2 text-sm font-semibold text-neutral-800 shadow hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+                aria-label="Close"
+              >
+                Close
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setLightboxIndex(
+                    (i) => (i - 1 + THEANNEX_SCREENSHOTS.length) % THEANNEX_SCREENSHOTS.length
+                  )
+                }
+                className="absolute left-3 top-1/2 -translate-y-1/2 rounded-lg bg-white/90 p-2 text-neutral-800 shadow hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+                aria-label="Previous screenshot"
+              >
+                ←
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setLightboxIndex(
+                    (i) => (i + 1) % THEANNEX_SCREENSHOTS.length
+                  )
+                }
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg bg-white/90 p-2 text-neutral-800 shadow hover:bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+                aria-label="Next screenshot"
+              >
+                →
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-2 border-t border-neutral-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm font-medium text-neutral-800">
+                {THEANNEX_SCREENSHOTS[lightboxIndex]?.alt}
+              </p>
+              <p className="text-xs text-neutral-500">
+                ESC to close · ←/→ to navigate
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
